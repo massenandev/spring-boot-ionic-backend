@@ -3,8 +3,12 @@ package com.example.demo.cursomc.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.demo.cursomc.dto.CategoriaDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.cursomc.domain.Categoria;
@@ -46,5 +50,14 @@ public class CategoriaService {
 	
 	public List<Categoria> findAll(){
 		return catRepository.findAll();
+	}
+	
+	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		return catRepository.findAll(pageRequest);
+	}
+
+	public Categoria fromDto(CategoriaDto objDto){
+		return new Categoria(objDto.getId(), objDto.getNome());
 	}
 }
