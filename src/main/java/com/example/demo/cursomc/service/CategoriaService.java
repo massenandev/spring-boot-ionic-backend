@@ -3,6 +3,7 @@ package com.example.demo.cursomc.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.demo.cursomc.domain.Cliente;
 import com.example.demo.cursomc.dto.CategoriaDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -32,10 +33,11 @@ public class CategoriaService {
 		obj.setId(null);
 		return catRepository.save(obj);
 	}
-	
+
 	public Categoria update(Categoria obj) {
-		find(obj.getId());
-		return catRepository.save(obj);
+		Categoria newObj = find(obj.getId());
+		updateData(newObj, obj);
+		return catRepository.save(newObj);
 	}
 
 	public void deleteById(Integer id) {
@@ -59,5 +61,9 @@ public class CategoriaService {
 
 	public Categoria fromDto(CategoriaDto objDto){
 		return new Categoria(objDto.getId(), objDto.getNome());
+	}
+
+	private void updateData(Categoria newObj, Categoria obj){
+		newObj.setNome(obj.getNome());
 	}
 }
